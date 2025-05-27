@@ -1,4 +1,4 @@
-# 🤖 HOPE – ASL Gesture Recognition AI ✋🔤
+#  ASL Gesture Recognition AI ✋🔤
 
 > **Empowering Communication Through AI | Helping the Deaf and Mute Community**
 
@@ -65,10 +65,6 @@ project-root/
 ├── label_encoder.pkl # Encoded ASL labels
 ├── README.md # This file
 └── requirements.txt # Python dependencies
-
-yaml
-Copy
-Edit
 
 ---
 
