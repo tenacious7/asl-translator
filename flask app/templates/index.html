@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASL Translation App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body id="top">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">ASL Translator</div>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#top" onclick="scrollToTop()">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#prediction">Predictor</a></li>
+                <li><a href="#how-it-works">Guide</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Landing Section -->
+    <section class="landing-section">
+        <div class="landing-content">
+            <h1>Transform Sign Language into Text</h1>
+            <p>Experience the power of AI-driven ASL recognition technology. Break communication barriers and connect with the deaf community like never before.</p>
+            <button class="cta-button" onclick="scrollToPrediction()">Start Converting</button>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section">
+        <div class="info-container">
+            <h2>Why Choose Our ASL Prediction App?</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Real-Time Translation</h3>
+                    <p>Experience instant conversion of ASL gestures into text with our advanced AI technology.</p>
+                </div>
+                <div class="info-card">
+                    <h3>High Accuracy</h3>
+                    <p>Our AI model is trained on thousands of ASL gestures to ensure precise and reliable translations.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Easy to Use</h3>
+                    <p>Simple interface designed for both beginners and experienced ASL users.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="info-container">
+            <h2>How It Works</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-hand-sparkles"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Position Your Hand</h3>
+                        <p>Place your hand within the designated green box on the camera frame.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-american-sign-language-interpreting"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Perform ASL Signs</h3>
+                        <p>Make clear ASL gestures following the on-screen guidelines.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Get Instant Translation</h3>
+                        <p>See your signs converted to text in real-time with word suggestions.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Text to Speech</h3>
+                        <p>Convert your translated text into spoken words instantly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Prediction Section -->
+    <section id="prediction" class="prediction-section">
+        <div class="section-container">
+            <h2 class="section-title">ASL Predictor</h2>
+            
+            <!-- Model Status Bar -->
+            <div class="model-status-bar">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Model Status: Loading...</span>
+                </div>
+                <div class="fps-counter">FPS: <span id="fpsCount">0</span></div>
+            </div>
+
+            <div class="prediction-container">
+                <!-- Video Feed Container -->
+                <div class="video-container">
+                    <img src="{{ url_for('video_feed') }}" alt="Video Feed">
+                    <div class="roi-overlay">
+                        <div class="roi-guide"></div>
+                        <span class="roi-text">Keep hand in this area</span>
+                    </div>
+                    <button class="camera-switch-btn" id="cameraSwitchBtn">
+                        <i class="fas fa-camera-rotate"></i>
+                    </button>
+                </div>
+
+                <!-- Prediction Panel -->
+                <div class="prediction-panel">
+                    <div class="output-group">
+                        <div class="output-card">
+                            <h3>Current Gesture</h3>
+                            <div class="gesture-card">
+                                <div class="card-header">
+                                    <i class="fas fa-hand-paper"></i>
+                                    <h3>Current Gesture</h3>
+                                </div>
+                                <div class="gesture-display">
+                                    <span id="gestureOutput" class="gesture-text">Ready...</span>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gesture-sequence">
+                            <h3>Gesture Sequence</h3>
+                            <div class="sequence-card">
+                                <div class="card-header">
+                                    <i class="fas fa-signature"></i>
+                                    <h3>Gesture Sequence</h3>
+                                </div>
+                                <div id="gestureSequence" class="sequence-display"></div>
+                            </div>
+                        </div>
+
+                        <div class="output-card">
+                            <h3>Predicted Word</h3>
+                            <div id="wordOutput" class="output-display"></div>
+                        </div>
+
+                        <div class="output-card">
+                            <h3>Suggestions</h3>
+                            <div class="suggestions-card">
+                                <div class="card-header">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <h3>Suggestions</h3>
+                                </div>
+                                <div id="suggestions" class="suggestions-grid"></div>
+                            </div>
+                        </div>
+
+                        <div class="collected-words-container">
+                            <h3>Collected Words</h3>
+                            <div class="collected-words-card">
+                                <div class="card-header">
+                                    <i class="fas fa-list"></i>
+                                    <h3>Collected Words</h3>
+                                </div>
+                                <div id="collectedWords" class="collected-words">
+                                    <!-- Words will be added here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sentence-generation">
+                            <button id="generateBtn" class="control-btn" onclick="generateSentence()">
+                                <span class="btn-text">Generate Sentence</span>
+                                <div class="loading-spinner"></div>
+                            </button>
+                            
+                            <div class="sentence-output">
+                                <h3>Generated Sentence</h3>
+                                <div class="sentence-container">
+                                    <div id="sentenceOutput" class="sentence-box"></div>
+                                    <button id="readBtn" class="control-btn read-btn" onclick="readSentence()" disabled>
+                                        <i class="fas fa-volume-up"></i>
+                                        <span class="btn-text">Read Aloud</span>
+                                        <div class="loading-spinner"></div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-panel">
+                        <button id="startBtn" class="control-btn primary">
+                            <span class="icon">▶️</span> Start
+                        </button>
+                        <button id="readBtn" class="control-btn">
+                            <span class="icon">🔊</span> Read
+                        </button>
+                        <div class="action-buttons">
+                            <button id="clearBtn" class="control-btn" onclick="handleClear()">
+                                <i class="fas fa-trash"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gesture Status -->
+            <div class="gesture-status">
+                <span id="gestureStatus" class="status ready">Ready for next gesture</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <h2>About ASL Translator</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>ASL Translator is dedicated to breaking down communication barriers between the deaf and hearing communities. Our state-of-the-art AI technology makes sign language translation accessible to everyone.</p>
+                    <div class="about-features">
+                        <div class="feature">
+                            <h3>Our Mission</h3>
+                            <p>To create an inclusive world where sign language speakers can communicate effortlessly with everyone.</p>
+                        </div>
+                        <div class="feature">
+                            <h3>Technology</h3>
+                            <p>Powered by advanced machine learning models trained on thousands of ASL gestures for accurate recognition.</p>
+                        </div>
+                        <div class="feature">
+                            <h3>Accessibility</h3>
+                            <p>Free to use, browser-based solution that works on any device with a camera.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <p>Have questions or feedback? We'd love to hear from you!</p>
+                    <div class="contact-details">
+                        <p>Email: contact@asltranslator.com</p>
+                        <p>Phone: (555) 123-4567</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Socket.IO Client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+    <!-- Application Scripts -->
+    <script>
+        // Navigation Functions
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollToPrediction() {
+            document.getElementById("prediction").scrollIntoView({ behavior: "smooth" });
+        }
+
+        // Socket.IO and Application Logic
+        const socket = io();
+        let isProcessing = false;
+        let selectedWords = [];
+        let lastClickTime = 0;
+        const doubleClickDelay = 300; // milliseconds
+
+        // Start/Stop button click handler
+        document.getElementById('startBtn').addEventListener('click', function() {
+            if (!isProcessing) {
+                socket.emit('start');
+                isProcessing = true;
+            } else {
+                socket.emit('stop');
+                isProcessing = false;
+            }
+        });
+
+        // Socket.IO event handlers
+        socket.on('connect', () => {
+            console.log('Connected to server');
+            updateStatus('Connected', true);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+            updateStatus('Disconnected', false);
+        });
+
+        socket.on('update_button', function(data) {
+            document.getElementById('startBtn').textContent = data.text;
+        });
+
+        socket.on('prediction', function(data) {
+            if (isProcessing) {
+                document.getElementById('gestureOutput').textContent = data.gesture;
+                
+                // Update gesture sequence with animation
+                const sequenceElement = document.getElementById('gestureSequence');
+                if (sequenceElement.textContent !== data.gesture_sequence) {
+                    sequenceElement.classList.add('update');
+                    setTimeout(() => {
+                        sequenceElement.classList.remove('update');
+                    }, 300);
+                }
+                sequenceElement.textContent = data.gesture_sequence;
+                
+                document.querySelector('.confidence-fill').style.width = data.confidence + '%';
+                
+                // Update status message
+                const statusElement = document.getElementById('gestureStatus');
+                if (statusElement) {
+                    statusElement.textContent = data.waiting_for_hand ? 
+                        "Remove hand to continue" : "Ready for next gesture";
+                    statusElement.className = data.waiting_for_hand ? 
+                        'status waiting' : 'status ready';
+                }
+                
+                // Update suggestions as clickable buttons
+                const suggestionsContainer = document.getElementById('suggestions');
+                suggestionsContainer.innerHTML = data.suggestions
+                    .map(word => `
+                        <button class="suggestion-btn" onclick="selectWord('${word}')">
+                            ${word}
+                        </button>
+                    `)
+                    .join('');
+            }
+        });
+
+        socket.on('sentence', function(data) {
+            const sentenceOutput = document.getElementById('sentenceOutput');
+            sentenceOutput.style.opacity = '0';
+            
+            setTimeout(() => {
+                sentenceOutput.textContent = data.sentence;
+                sentenceOutput.style.opacity = '1';
+            }, 200);
+        });
+
+        socket.on('cleared', function() {
+            selectedWords = [];
+            updateSelectedWords();
+            document.getElementById('sentenceOutput').textContent = '';
+        });
+
+        socket.on('gesture_buffer_cleared', function() {
+            document.getElementById('gestureSequence').textContent = '';
+        });
+
+        socket.on('suggestions_cleared', function() {
+            document.getElementById('suggestions').innerHTML = '';
+            document.getElementById('gestureSequence').textContent = '';
+        });
+
+        socket.on('all_cleared', function() {
+            document.getElementById('suggestions').innerHTML = '';
+            document.getElementById('gestureSequence').textContent = '';
+            document.getElementById('sentenceOutput').textContent = '';
+            selectedWords = [];
+            updateSelectedWords();
+        });
+
+        socket.on('reading_complete', function() {
+            const readBtn = document.getElementById('readBtn');
+            readBtn.classList.remove('loading');
+        });
+
+        // UI update functions
+        function updateStatus(message, isConnected) {
+            const statusText = document.querySelector('.status-text');
+            const statusDot = document.querySelector('.status-dot');
+            const fpsCount = document.getElementById('fpsCount');
+            statusText.textContent = `Model Status: ${message}`;
+            statusDot.style.backgroundColor = isConnected ? 'green' : 'red';
+        }
+
+        function selectWord(word) {
+            selectedWords.push(word);
+            updateCollectedWords();
+            clearSuggestions();
+        }
+
+        function updateSelectedWords() {
+            const container = document.getElementById('selectedWords');
+            container.innerHTML = selectedWords
+                .map((word, index) => `
+                    <div class="selected-word">
+                        ${word}
+                        <span class="remove-word" onclick="removeWord(${index})">×</span>
+                    </div>
+                `)
+                .join('');
+        }
+
+        function updateCollectedWords() {
+            const container = document.getElementById('collectedWords');
+            container.innerHTML = selectedWords
+                .map((word, index) => `
+                    <div class="collected-word">
+                        <span class="word-text">${word}</span>
+                        <button class="remove-word" onclick="removeWord(${index})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `)
+                .join('');
+        }
+
+        function removeWord(index) {
+            selectedWords.splice(index, 1);
+            updateSelectedWords();
+            updateCollectedWords();
+        }
+
+        function generateSentence() {
+            if (selectedWords.length === 0) return;
+
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.classList.add('loading');
+            
+            document.getElementById('sentenceOutput').textContent = '';
+            
+            socket.emit('generate_sentence', { words: selectedWords });
+            
+            setTimeout(() => {
+                generateBtn.classList.remove('loading');
+            }, 2000);
+        }
+
+        function readSentence() {
+            const readBtn = document.getElementById('readBtn');
+            readBtn.classList.add('loading');
+            socket.emit('read');
+        }
+
+        function handleClear(event) {
+            const currentTime = new Date().getTime();
+            const timeDiff = currentTime - lastClickTime;
+            
+            if (timeDiff < doubleClickDelay) {
+                // Double click - clear sentence
+                clearAll();
+                const clearBtn = document.getElementById('clearBtn');
+                clearBtn.innerHTML = '<i class="fas fa-trash"></i> Clear All';
+                setTimeout(() => {
+                    clearBtn.innerHTML = '<i class="fas fa-trash"></i> Clear';
+                }, 1000);
+            } else {
+                // Single click - clear suggestions and gesture sequence
+                clearSuggestions();
+                const clearBtn = document.getElementById('clearBtn');
+                clearBtn.innerHTML = '<i class="fas fa-trash"></i> Clear Suggestions';
+                setTimeout(() => {
+                    clearBtn.innerHTML = '<i class="fas fa-trash"></i> Clear';
+                }, 1000);
+            }
+            
+            lastClickTime = currentTime;
+        }
+
+        function clearSuggestions() {
+            // Clear suggestions and gesture sequence
+            socket.emit('clear_suggestions');
+            document.getElementById('suggestions').innerHTML = '';
+            document.getElementById('gestureSequence').textContent = '';
+            // Reset gesture status
+            const statusElement = document.getElementById('gestureStatus');
+            if (statusElement) {
+                statusElement.textContent = "Ready for next gesture";
+                statusElement.className = 'status ready';
+            }
+        }
+
+        function clearAll() {
+            // Clear everything including sentence
+            socket.emit('clear_all');
+            clearSuggestions();
+            selectedWords = [];
+            updateSelectedWords();
+            document.getElementById('sentenceOutput').textContent = '';
+        }
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const isOpen = navLinks.classList.contains('active');
+            mobileMenuBtn.querySelector('i').classList = isOpen ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.navbar') && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.querySelector('i').classList = 'fas fa-bars';
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.querySelector('i').classList = 'fas fa-bars';
+            });
+        });
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.querySelector('i').classList = 'fas fa-bars';
+            }
+        });
+
+        // Add camera switch functionality
+        const cameraSwitchBtn = document.getElementById('cameraSwitchBtn');
+        
+        // Only show camera switch button on mobile/tablet devices
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            cameraSwitchBtn.style.display = 'flex';
+        }
+
+        cameraSwitchBtn.addEventListener('click', function() {
+            socket.emit('switch_camera');
+            // Add loading state
+            this.classList.add('switching');
+        });
+
+        socket.on('camera_switched', function(data) {
+            // Remove loading state
+            cameraSwitchBtn.classList.remove('switching');
+            // Refresh the video feed
+            const videoFeed = document.querySelector('.video-container img');
+            videoFeed.src = "{{ url_for('video_feed') }}?" + new Date().getTime();
+        });
+    </script>
+</body>
+</html>

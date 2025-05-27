@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Recognition</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f2f5;
+        }
+        #videoFrame {
+            border: 2px solid #1a73e8;
+            margin: 20px 0;
+        }
+        .controls {
+            margin: 10px;
+        }
+        .label {
+            font-size: 18px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sign Language Recognition</h1>
+    <img id="videoFrame" src="{{ url_for('video_feed') }}" alt="Video Feed">
+    
+    <div class="controls">
+        <div class="label">Current Gesture: <span id="gesture">{{ gesture }}</span></div>
+        <div class="label">Current Word: <span id="word">{{ word }}</span></div>
+        <div class="label">Current Sentence: <span id="sentence">{{ sentence }}</span></div>
+        <button onclick="toggleProcessing()">Start/Stop Processing</button>
+        <button onclick="readSentence()">Read Sentence</button>
+        <button onclick="clearAll()">Clear</button>
+    </div>
+
+    <script>
+        function toggleProcessing() {
+            fetch('/toggle_processing').then(response => response.json()).then(data => {
+                console.log(data.status, data.active);
+            });
+        }
+        
+        function readSentence() {
+            fetch('/read_sentence').then(response => response.json()).then(data => {
+                console.log(data.status);
+            });
+        }
+        
+        function clearAll() {
+            fetch('/clear_all').then(response => response.json()).then(data => {
+                console.log(data.status);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+Flask
+requests
+spellchecker
+transformers
+torch
