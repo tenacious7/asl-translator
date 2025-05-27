@@ -40,7 +40,7 @@
 
 ## 📸 Visual Representation
 
-![ASL Project](./assets/cover_asl.png)
+![ASL Project](Screenshot 2024-11-16 152926.png)
 
 ---
 
