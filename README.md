@@ -40,7 +40,7 @@
 
 📸 Visual Showcase of ASL Project
 🚀 1. Flask Landing Page
-<p align="center"> <img src="assets/asl landing page.png" alt="Flask Landing Page" width="600"/> </p> <p align="center"> <b>Figure 1:</b> Flask Web Application – Home Page for ASL Gesture Recognition </p>
+<p align="center"> <img src="asl_landing_page .png" alt="Flask Landing Page" width="600"/> </p> <p align="center"> <b>Figure 1:</b> Flask Web Application – Home Page for ASL Gesture Recognition </p>
 🧪 2. Real-time Gesture Testing
 <p align="center"> <img src="assets/Testing image.png" alt="ASL Model Testing" width="600"/> </p> <p align="center"> <b>Figure 2:</b> Real-Time Gesture Detection and Prediction Output from ASL Model </p>
 🔄 3. Flask Integration with ASL Model
