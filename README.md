@@ -40,7 +40,12 @@
 
 ## 📸 Visual Representation
 
-![ASL Project](Screenshot 2024-11-16 152926.png)
+<p align="center">
+  <img src="assets/ui.png" alt="ASL Project Cover" width="600"/>
+</p>
+<p align="center">
+  <b>Figure 1:</b> AI-Powered Sign Language Recognition System
+</p>
 
 ---
 
